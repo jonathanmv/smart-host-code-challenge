@@ -62,4 +62,12 @@ public class RoomsOccupationState {
                 .findAny()
                 .orElse(null);
     }
+
+    @Override
+    public String toString() {
+        return "RoomsOccupationState{" +
+                "availableRooms=" + availableRooms +
+                ", potentialGuests=" + potentialGuests +
+                '}';
+    }
 }

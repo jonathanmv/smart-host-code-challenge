@@ -61,4 +61,13 @@ public class RoomAvailabilityState {
         }
         return i;
     }
+
+    @Override
+    public String toString() {
+        return "RoomAvailabilityState{" +
+                "roomType=" + roomType +
+                ", availability=" + availability +
+                ", occupancy=" + occupancy +
+                '}';
+    }
 }
