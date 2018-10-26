@@ -33,7 +33,37 @@ class PremiumEconomyPremiumOccupancyOptimizerTest {
      * Usage Premium: 3 (EUR 738) Usage Economy: 3 (EUR 167)
       */
     @Test
-    void optimizeRoomOccupationTestOne() {
+    void testOne() {
+        runTest(3, 3, 738, 167);
+    }
+
+    /**
+     * Test 2
+     * Free Premium rooms: 7 Free Economy rooms: 5
+     * Usage Premium: 6 (EUR 1054) Usage Economy: 4 (EUR 189)
+     */
+    @Test
+    void testTwo() {
+        runTest(3, 3, 738, 167);
+    }
+
+    /**
+     * Test 3
+     * Free Premium rooms: 2 Free Economy rooms: 7
+     * Usage Premium: 2 (EUR 583) Usage Economy: 4 (EUR 189)
+     */
+    @Test
+    void testThree() {
+        runTest(3, 3, 738, 167);
+    }
+
+    /**
+     * Test 4
+     * Free Premium rooms: 7 Free Economy rooms: 1
+     * Usage Premium: 7 (EUR 1153) Usage Economy: 1 (EUR 45)
+     */
+    @Test
+    void testFour() {
         runTest(3, 3, 738, 167);
     }
 }
