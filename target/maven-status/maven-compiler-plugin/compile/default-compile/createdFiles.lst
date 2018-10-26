@@ -1,6 +1,0 @@
-occupancy/RoomType.class
-occupancy/RoomAvailabilityState.class
-occupancy/RoomOccupancyHighestPriceFirstOptimizer.class
-occupancy/IRoomOccupancyOptimizer.class
-occupancy/RoomsOccupationState.class
-occupancy/RoomTypeRevenue.class
