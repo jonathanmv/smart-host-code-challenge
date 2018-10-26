@@ -7,6 +7,10 @@ import com.smart_host.rooms.occupancy.RoomsOccupationState;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * DAO object that includes the revenue per room. This class is created to have more control over the
+ * response sent to the clients. It doesn't have to map one to one with RoomAvailabilityState
+ */
 public class RoomOccupationOptimizationResponse {
     private RoomType roomType;
     private double revenue;

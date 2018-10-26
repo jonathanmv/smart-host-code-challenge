@@ -12,6 +12,9 @@
  */
 package com.smart_host.rooms.api.model;
 
+/**
+ * Represents a error when processing requests.
+ */
 public class Error {
     private String message;
 

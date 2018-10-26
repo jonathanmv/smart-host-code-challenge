@@ -52,6 +52,7 @@ public class RoomAvailabilityState {
         return occupancy.stream().reduce((x, y) -> x + y).orElse((double) 0);
     }
 
+    // Assigns guests to rooms based on availability in order
     public int assignGuests(List<Double> guests) {
         int i = 0;
         int available = availability;
@@ -60,14 +61,5 @@ public class RoomAvailabilityState {
             setAvailability(availability - 1);
         }
         return i;
-    }
-
-    @Override
-    public String toString() {
-        return "RoomAvailabilityState{" +
-                "roomType=" + roomType +
-                ", availability=" + availability +
-                ", occupancy=" + occupancy +
-                '}';
     }
 }

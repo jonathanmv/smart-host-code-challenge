@@ -43,9 +43,9 @@ public class RoomsController {
 
     // /rooms?economy=3&premium=3&anotherRoomType=0
     @RequestMapping(path = "/rooms", method = RequestMethod.GET)
-    public ResponseEntity<?> listRoomOccupancyOptimization(@RequestParam Map<String,String> roomCategoryAvailabilityMap) throws Exception {
+    public ResponseEntity<?> listRoomOccupancyOptimization(@RequestParam Map<String,String> roomTypeAvailabilityMap) throws Exception {
         try {
-            List<RoomAvailabilityState> availableRooms = getRoomAvailability(roomCategoryAvailabilityMap);
+            List<RoomAvailabilityState> availableRooms = getRoomAvailability(roomTypeAvailabilityMap);
             List<Double> potentialGuests = loadPotentialClients();
             RoomsOccupationState roomsOccupationState = new RoomsOccupationState(availableRooms, potentialGuests);
             roomsOccupationState = optimizer.optimizeRoomOccupation(roomsOccupationState);
@@ -59,6 +59,11 @@ public class RoomsController {
         
     }
 
+    /**
+     * Loads potential clients based on a static resource. The URL could be set by configuration or env vars.
+     * Left hardcoded in here due to time constrains.
+     * @return a list of potential clients containing the amount they are willing to pay for a room.
+     */
     private List<Double> loadPotentialClients() {
         RestTemplate potentialGuestsLoader = new RestTemplate();
         String potentialGuestsUrl = "https://gist.githubusercontent.com/fjahr/b164a446db285e393d8e4b36d17f4143/raw/75108c09a72a001a985d27b968a0ac5a867e830b/smarthost_hotel_guests.json";
@@ -67,9 +72,15 @@ public class RoomsController {
         return potentialClientsFromList(list);
     }
 
-    private List<RoomAvailabilityState> getRoomAvailability(Map<String, String> roomCategoryAvailabilityMap) throws Exception {
+    /**
+     * Creates a map of available rooms per room type converting the key into a RoomType and the value into availability
+     * @param roomTypeAvailabilityMap
+     * @return A list of RoomAvailabilityState
+     * @throws Exception When unable to create a RoomType or the availability can't be parsed to int
+     */
+    private List<RoomAvailabilityState> getRoomAvailability(Map<String, String> roomTypeAvailabilityMap) throws Exception {
         List<RoomAvailabilityState> availability = new ArrayList<>();
-        for (Map.Entry<String, String> entry : roomCategoryAvailabilityMap.entrySet()) {
+        for (Map.Entry<String, String> entry : roomTypeAvailabilityMap.entrySet()) {
             String roomTypeString = entry.getKey().toUpperCase();
             String availabilityString = entry.getValue();
             try {
@@ -85,6 +96,11 @@ public class RoomsController {
         return availability;
     }
 
+    /**
+     * Finds the double values in the string. The referenced file in the test is a multi-line json
+     * @param list an array of numbers
+     * @return A list of doubles representing the potential clients for the rooms
+     */
     public List<Double> potentialClientsFromList(String list) {
         Pattern numbers = Pattern.compile("\\d+(\\.\\d+)?", Pattern.DOTALL);
         Matcher matcher = numbers.matcher(list);

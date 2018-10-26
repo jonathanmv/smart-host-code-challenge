@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents the state of available rooms and potential clients.
+ * Defines methods to know the revenue or availability per room type
+ */
 public class RoomsOccupationState {
     private List<RoomAvailabilityState> availableRooms;
     private List<Double> potentialGuests;
@@ -61,13 +65,5 @@ public class RoomsOccupationState {
                 .filter(room -> room.getRoomType().equals(roomType))
                 .findAny()
                 .orElse(null);
-    }
-
-    @Override
-    public String toString() {
-        return "RoomsOccupationState{" +
-                "availableRooms=" + availableRooms +
-                ", potentialGuests=" + potentialGuests +
-                '}';
     }
 }

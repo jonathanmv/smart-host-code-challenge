@@ -8,7 +8,7 @@ import java.util.List;
  * 1. Premium guests will be assigned to premium rooms using highest price sorting
  * 2. Economy guests will be assigned to economy rooms using highest price sorting
  * 3. Economy guests will be assigned to premium rooms only if all economy rooms have been assigned
- * and there are premium rooms available
+ * and there are premium rooms available. Only the highest paying economy guests are eligible for upgrade.
  */
 public class PremiumEconomyPremiumOccupancyOptimizer implements IRoomOccupancyOptimizer {
     List<IRoomOccupancyOptimizer> optimizers = new ArrayList<>();

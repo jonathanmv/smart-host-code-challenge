@@ -4,6 +4,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Optimizes room occupation by sorting in descending order the potential customers and assigns them to the rooms.
+ * It includes a price range so that only paying customers in the range are eligible for assignation
+ */
 public class RoomOccupancyHighestPriceFirstOptimizer implements IRoomOccupancyOptimizer {
     private double upperLimit;
     private double lowerLimit;
@@ -45,24 +49,30 @@ public class RoomOccupancyHighestPriceFirstOptimizer implements IRoomOccupancyOp
         if (potentialGuests.size() < 1) {
             return roomsOccupationState;
         }
+        // sort by descent order
         potentialGuests.sort(Collections.reverseOrder());
 
         RoomAvailabilityState roomAvailability = roomsOccupationState.getRoomAvailabilityStateByType(roomType);
         int availability = roomAvailability.getAvailability();
 
+        // Keep the guests that won't get a room assigned to merge them later
         List<Double> deniedGuests = potentialGuests.stream()
                 .filter(price -> upperLimit <= price || price <= lowerLimit)
                 .collect(Collectors.toList());
+
+        // Find the eligible guests
         List<Double> availableGuests = potentialGuests.stream()
                 .filter(price -> upperLimit > price && price > lowerLimit)
                 .collect(Collectors.toList());
 
         int assignedGuests = roomAvailability.assignGuests(availableGuests);
 
+        // Keep the eligible guests that were not assigned
         List<Double> unassignedGuests = availableGuests.stream()
                 .skip(assignedGuests)
                 .collect(Collectors.toList());
 
+        // Merge guests without room
         List<Double> newPotentialGuests = Stream.concat(deniedGuests.stream(), unassignedGuests.stream())
                 .collect(Collectors.toList());
 
