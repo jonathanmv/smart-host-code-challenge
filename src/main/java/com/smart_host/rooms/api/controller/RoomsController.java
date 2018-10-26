@@ -19,12 +19,17 @@ import com.smart_host.rooms.occupancy.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -41,7 +46,7 @@ public class RoomsController {
     public ResponseEntity<?> listRoomOccupancyOptimization(@RequestParam Map<String,String> roomCategoryAvailabilityMap) throws Exception {
         try {
             List<RoomAvailabilityState> availableRooms = getRoomAvailability(roomCategoryAvailabilityMap);
-            List<Double> potentialGuests = Arrays.asList(23.0, 45.0, 155.0, 374.0, 22.0, 99.0, 100.0, 101.0, 115.0, 209.0);
+            List<Double> potentialGuests = loadPotentialClients();
             RoomsOccupationState roomsOccupationState = new RoomsOccupationState(availableRooms, potentialGuests);
             roomsOccupationState = optimizer.optimizeRoomOccupation(roomsOccupationState);
             List<RoomOccupationOptimizationResponse> response = RoomOccupationOptimizationResponse.fromRoomOccupationState(roomsOccupationState);
@@ -51,6 +56,15 @@ public class RoomsController {
             exception.printStackTrace();
             return ResponseEntity.badRequest().body(new Error(exception.getMessage()));
         }
+        
+    }
+
+    private List<Double> loadPotentialClients() {
+        RestTemplate potentialGuestsLoader = new RestTemplate();
+        String potentialGuestsUrl = "https://gist.githubusercontent.com/fjahr/b164a446db285e393d8e4b36d17f4143/raw/75108c09a72a001a985d27b968a0ac5a867e830b/smarthost_hotel_guests.json";
+        ResponseEntity<String> guests = potentialGuestsLoader.getForEntity(potentialGuestsUrl, String.class);
+        String list = guests.getBody();
+        return potentialClientsFromList(list);
     }
 
     private List<RoomAvailabilityState> getRoomAvailability(Map<String, String> roomCategoryAvailabilityMap) throws Exception {
@@ -69,5 +83,21 @@ public class RoomsController {
             }
         }
         return availability;
+    }
+
+    public List<Double> potentialClientsFromList(String list) {
+        Pattern numbers = Pattern.compile("\\d+(\\.\\d+)?", Pattern.DOTALL);
+        Matcher matcher = numbers.matcher(list);
+        List<Double> result = new ArrayList<>();
+
+        while (matcher.find()) {
+            try {
+                result.add(Double.parseDouble(matcher.group(0)));
+            } catch (Exception exception) {
+                //Ignore strings that are not numbers
+            }
+        }
+
+        return result;
     }
 }
