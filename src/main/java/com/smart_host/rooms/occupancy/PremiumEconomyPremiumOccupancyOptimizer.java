@@ -14,16 +14,28 @@ public class PremiumEconomyPremiumOccupancyOptimizer implements IRoomOccupancyOp
     List<IRoomOccupancyOptimizer> optimizers = new ArrayList<>();
 
     public PremiumEconomyPremiumOccupancyOptimizer() {
-        optimizers.add(new RoomOccupancyHighestPriceFirstOptimizer(Double.MAX_VALUE, 100, RoomType.PREMIUM));
+        optimizers.add(new RoomOccupancyHighestPriceFirstOptimizer(Double.MAX_VALUE, 99, RoomType.PREMIUM));
         optimizers.add(new RoomOccupancyHighestPriceFirstOptimizer(100, 0, RoomType.ECONOMY));
         optimizers.add(new RoomOccupancyHighestPriceFirstOptimizer(100, 0, RoomType.PREMIUM));
     }
 
     @Override
     public RoomsOccupationState optimizeRoomOccupation(RoomsOccupationState roomsOccupationState) {
-        for (IRoomOccupancyOptimizer optimizer : optimizers) {
-            roomsOccupationState = optimizer.optimizeRoomOccupation(roomsOccupationState);
+        // Occupy all premium rooms first
+        roomsOccupationState = optimizers.get(0).optimizeRoomOccupation(roomsOccupationState);
+        int numberOfUpgrades = getNumberOfPremiumUpgrades(roomsOccupationState);
+        if (numberOfUpgrades > 0) {
+            // Upgrade economy to premium
+            roomsOccupationState = optimizers.get(2).optimizeRoomOccupation(roomsOccupationState);
         }
+        // assign economy
+        roomsOccupationState = optimizers.get(1).optimizeRoomOccupation(roomsOccupationState);
         return roomsOccupationState;
+    }
+
+    private int getNumberOfPremiumUpgrades(RoomsOccupationState roomsOccupationState) {
+        int availableEconomy = roomsOccupationState.getAvailableRoomsByType(RoomType.ECONOMY);
+        int potentialGuests = roomsOccupationState.getPotentialGuests().size();
+        return potentialGuests - availableEconomy;
     }
 }
