@@ -55,7 +55,7 @@ public class RoomAvailabilityState {
     public int assignGuests(List<Double> guests) {
         int i = 0;
         int available = availability;
-        for (; i < available; i++) {
+        for (; i < available && i < guests.size(); i++) {
             occupancy.add(guests.get(i));
             setAvailability(availability - 1);
         }

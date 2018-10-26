@@ -44,7 +44,7 @@ class PremiumEconomyPremiumOccupancyOptimizerTest {
      */
     @Test
     void testTwo() {
-        runTest(3, 3, 738, 167);
+        runTest(7, 5, 1054, 189);
     }
 
     /**
@@ -54,7 +54,7 @@ class PremiumEconomyPremiumOccupancyOptimizerTest {
      */
     @Test
     void testThree() {
-        runTest(3, 3, 738, 167);
+        runTest(2, 7, 583, 189);
     }
 
     /**
@@ -64,6 +64,6 @@ class PremiumEconomyPremiumOccupancyOptimizerTest {
      */
     @Test
     void testFour() {
-        runTest(3, 3, 738, 167);
+        runTest(7, 1, 1153, 45);
     }
 }
