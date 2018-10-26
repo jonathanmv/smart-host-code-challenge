@@ -1,37 +1,66 @@
 package occupancy;
 
-public class RoomsOccupationState {
-    private RoomAvailabilityState[] availableRooms;
-    private double[] potentialGuests;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-    public RoomsOccupationState(RoomAvailabilityState[] availableRooms, double[] potentialGuests) {
+public class RoomsOccupationState {
+    private List<RoomAvailabilityState> availableRooms;
+    private List<Double> potentialGuests;
+
+    public RoomsOccupationState(List<RoomAvailabilityState> availableRooms, List<Double> potentialGuests) {
         this.availableRooms = availableRooms;
         this.potentialGuests = potentialGuests;
     }
 
-    public RoomAvailabilityState[] getAvailableRooms() {
+    public List<RoomAvailabilityState> getAvailableRooms() {
         return availableRooms;
     }
 
-    public void setAvailableRooms(RoomAvailabilityState[] availableRooms) {
+    public void setAvailableRooms(List<RoomAvailabilityState> availableRooms) {
         this.availableRooms = availableRooms;
     }
 
-    public double[] getPotentialGuests() {
+    public List<Double> getPotentialGuests() {
         return potentialGuests;
     }
 
-    public void setPotentialGuests(double[] potentialGuests) {
+    public void setPotentialGuests(List<Double> potentialGuests) {
         this.potentialGuests = potentialGuests;
     }
 
-    public RoomTypeRevenue[] getRoomTypeRevenue() {
-        RoomTypeRevenue[] roomTypeRevenues = new RoomTypeRevenue[availableRooms.length];
-        for (int i = 0; i < availableRooms.length; i++) {
-            RoomAvailabilityState availableRoom = availableRooms[i];
-            roomTypeRevenues[i] = new RoomTypeRevenue(availableRoom.getRoomType(), availableRoom.getRevenue());
+    public Map<RoomType, Double> getRoomTypeRevenueMap() {
+
+        Map<RoomType, Double> revenues = new HashMap<>();
+        for (RoomAvailabilityState room : availableRooms) {
+            revenues.put(room.getRoomType(), room.getRevenue());
         }
 
-        return roomTypeRevenues;
+        return revenues;
+    }
+
+    public double getRevenueByRoomType(RoomType roomType) {
+        RoomAvailabilityState roomAvailabilityState = availableRooms.stream()
+                .filter(room -> room.getRoomType().equals(roomType))
+                .findFirst()
+                .orElse(null);
+
+        return roomAvailabilityState == null ? 0 : roomAvailabilityState.getRevenue();
+    }
+
+    public int getAvailableRoomsByType(RoomType roomType) {
+        return availableRooms.stream()
+                .filter(room -> room.getRoomType().equals(roomType))
+                .map(RoomAvailabilityState::getAvailability)
+                .findAny()
+                .orElse(0);
+    }
+
+    public RoomAvailabilityState getRoomAvailabilityStateByType(RoomType roomType) {
+        return availableRooms.stream()
+                .filter(room -> room.getRoomType().equals(roomType))
+                .findAny()
+                .orElse(null);
     }
 }
