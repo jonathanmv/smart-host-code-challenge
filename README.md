@@ -4,6 +4,32 @@ Build a room occupancy optimization tool for one of our hotel clients! Our custo
  
 Please build a small API that provides an interface for hotels to enter the numbers of Premium and Economy rooms that are available for the night and then tells them immediately how many rooms of each category will be occupied and how much money they will make in total.
 
+# Tests
+**Click here to see [Test 1](https://49tgjcptha.execute-api.us-east-1.amazonaws.com/Prod/rooms?economy=3&premium=3)**
+
+Free Premium rooms: 3 Free Economy rooms: 3
+
+Usage Premium: 3 (EUR 738) Usage Economy: 3 (EUR 167)
+
+**Click here to see [Test 2](https://49tgjcptha.execute-api.us-east-1.amazonaws.com/Prod/rooms?economy=5&premium=7)**
+
+Free Premium rooms: 7 Free Economy rooms: 5
+
+Usage Premium: 6 (EUR 1054) Usage Economy: 4 (EUR 189)
+
+**Click here to see [Test 3](https://49tgjcptha.execute-api.us-east-1.amazonaws.com/Prod/rooms?economy=7&premium=2)**
+
+Free Premium rooms: 2 Free Economy rooms: 7
+
+Usage Premium: 2 (EUR 583) Usage Economy: 4 (EUR 189)
+
+**Click here to see [Test 4](https://49tgjcptha.execute-api.us-east-1.amazonaws.com/Prod/rooms?economy=1&premium=7)**
+
+Free Premium rooms: 7 Free Economy rooms: 1
+
+Usage Premium: 7 (EUR 1153) Usage Economy: 1 (EUR 45)
+
+
 # Decisions
 ## Why /rooms GET?
 I wanted to provide a flexible and easy to use api. Also it's GET because the service represents a query.
