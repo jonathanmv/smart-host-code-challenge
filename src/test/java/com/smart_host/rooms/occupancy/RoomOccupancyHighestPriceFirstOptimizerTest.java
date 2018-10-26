@@ -1,4 +1,4 @@
-package occupancy;
+package com.smart_host.rooms.occupancy;
 
 import org.junit.jupiter.api.Test;
 

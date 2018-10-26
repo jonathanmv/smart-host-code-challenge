@@ -1,6 +1,5 @@
-package occupancy;
+package com.smart_host.rooms.occupancy;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

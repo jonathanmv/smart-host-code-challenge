@@ -1,8 +1,7 @@
-package occupancy;
+package com.smart_host.rooms.occupancy;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 public class RoomOccupancyHighestPriceFirstOptimizer implements IRoomOccupancyOptimizer {
